@@ -11,7 +11,7 @@ class Game:
 
         pygame.display.set_caption('Bunneta')
         self.screen = pygame.display.set_mode((640, 480))
-        self.display = pygame.Surface((640, 480))
+        self.display = pygame.Saurface((640, 480))
 
         self.clock = pygame.time.Clock()
         
