@@ -44,11 +44,11 @@ class Player():
     def update(self):
         dy = 0
         dx = 0
-        w_cooldown = 5
+        w_cooldown = 7
         key = pygame.key.get_pressed()
         #Jump
         if key[pygame.K_SPACE] and self.jumped == False:
-            self.vel_y += -15
+            self.vel_y += -20
             self.jumped = True
         if key[pygame.K_SPACE] == False:
             self.jumped = False
