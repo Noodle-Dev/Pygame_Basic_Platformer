@@ -111,6 +111,7 @@ class World():
         self.tile_list = []
         gn_img = pygame.image.load('../assets_img/Tiles/gn.png')
         grass_img = pygame.image.load('../assets_img/Tiles/grass.png')
+        enemie_img = pygame.image.load('../assets_img/Enemies/enemie_1.png')
         
         row_count = 0
         for row in data:
@@ -130,6 +131,14 @@ class World():
                     img_rect.y = row_count *  tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
+                if tile == 3: #----DELTE THIS LATER
+                    img = pygame.transform.scale(enemie_img, (tile_size, tile_size))
+                    img_rect = img.get_rect()
+                    img_rect.x = col_count *  tile_size
+                    img_rect.y = row_count *  tile_size
+                    tile = (img, img_rect)
+                    self.tile_list.append(tile)
+                    
                 col_count += 1
             row_count += 1
     def draw(self):
