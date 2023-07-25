@@ -14,6 +14,7 @@ icon = pygame.image.load('../assets_img/app_icon.png')
 pygame.display.set_icon(icon)
 
 tile_size = 50
+enemie_group = pygame.sprite.Group()
 
 def draw_grid():
 	for line in range(0, 20):
@@ -111,7 +112,6 @@ class World():
         self.tile_list = []
         gn_img = pygame.image.load('../assets_img/Tiles/gn.png')
         grass_img = pygame.image.load('../assets_img/Tiles/grass.png')
-        enemie_img = pygame.image.load('../assets_img/Enemies/enemie_1.png')
         
         row_count = 0
         for row in data:
@@ -131,13 +131,9 @@ class World():
                     img_rect.y = row_count *  tile_size
                     tile = (img, img_rect)
                     self.tile_list.append(tile)
-                if tile == 3: #----DELTE THIS LATER
-                    img = pygame.transform.scale(enemie_img, (tile_size, tile_size))
-                    img_rect = img.get_rect()
-                    img_rect.x = col_count *  tile_size
-                    img_rect.y = row_count *  tile_size
-                    tile = (img, img_rect)
-                    self.tile_list.append(tile)
+                if tile == 3:
+                    enemie = Enemy(col_count * tile_size, row_count * tile_size + 15)
+                    enemie_group.add(enemie)
                     
                 col_count += 1
             row_count += 1
@@ -145,8 +141,28 @@ class World():
         for tile in self.tile_list:
             screen.blit(tile[0], tile[1])
             #pygame.draw.rect(screen, ('#FF0000'), tile[1], 2)
-  
+
+class Enemy(pygame.sprite.Sprite):
+	def __init__(self, x, y):
+		pygame.sprite.Sprite.__init__(self)
+		self.image = pygame.image.load('../assets_img/Enemies/enemie_1.png')
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
+		self.move_direction = 1
+		self.move_counter = 0
+
+	def update(self):
+		self.rect.x += self.move_direction
+		self.move_counter += 1
+		if abs(self.move_counter) > 50:
+			self.move_direction *= -1
+			self.move_counter *= -1
+
+
 world = World(wd.world_data)
+#enemie_group = pygame.sprite.Group()
+
 player = Player(100, screen_height - 130)
 run = True
 
@@ -155,6 +171,8 @@ while run:
     screen.fill('#000000')
     clock.tick(60)
     world.draw()
+    enemie_group.update()
+    enemie_group.draw(screen)
     player.update()
     
     for event in pygame.event.get():
