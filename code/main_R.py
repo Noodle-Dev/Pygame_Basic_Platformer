@@ -21,7 +21,7 @@ def draw_grid():
     for line in range(0, 20):
         pygame.draw.line(screen, (255, 255, 255), (0, line * tile_size), (screen_width, line * tile_size))
         pygame.draw.line(screen, (255, 255, 255), (line * tile_size, 0), (line * tile_size, screen_height))
-                
+       
 class Player():
     def __init__(self, x, y):
         self.images_right = []
