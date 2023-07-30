@@ -18,6 +18,8 @@ tile_size = 50
 game_over = 0
 
 restart_img = pygame.image.load('../assets_img/UI/restart_btn.png')
+start_img = pygame.image.load('../assets_img/UI/start_btn.png')
+exit_img = pygame.image.load('../assets_img/UI/exit_btn.png')
 enemies_group = pygame.sprite.Group()  # Initialize the enemies_group
 lava_group = pygame.sprite.Group()
 
@@ -255,6 +257,9 @@ class Lava(pygame.sprite.Sprite):
 world = World(wd.world_data)
 player = Player(100, screen_height - 130)
 restart_button = Button(screen_width // 2 - 50, screen_height // 2 + 100, restart_img)
+start_button = Button(screen_width // 2 - 350, screen_height // 2, start_img)
+exit_button = Button(screen_width // 2 - 150, screen_height // 2, exit_img)
+
 run = True
 while run:
     screen.fill('#000000')
