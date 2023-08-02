@@ -1,7 +1,6 @@
 import pygame
 from pygame.locals import *
-from pygame.sprite import AbstractGroup
-from world_datas import World_data as wd
+#from pygame.sprite import AbstractGroups
 import pickle
 from os import path
 
@@ -293,7 +292,7 @@ if path.exists(f'level{level}_data'):
 	pickle_in = open(f'level{level}_data', 'rb')
 	world_data = pickle.load(pickle_in)
         
-world = World(wd.world_data)
+world = World(world_data)
 player = Player(100, screen_height - 130)
 restart_button = Button(screen_width // 2 - 50, screen_height // 2 + 100, restart_img)
 start_button = Button(screen_width // 2 - 350, screen_height // 2, start_img)
@@ -310,19 +309,36 @@ while run:
        if start_button.draw():
            main_menu = False
     else:
-         world.draw() 
+         world.draw()
          if game_over == 0:
-          enemies_group.update()  # Update the enemies
-          enemies_group.draw(screen)  # Draw the enemies
-          lava_group.draw(screen)
-          exit_group.draw(screen)
-          game_over = player.update(game_over)
+             enemies_group.update()
+         enemies_group.draw(screen)
+         lava_group.draw(screen)
+         exit_group.draw(screen)
 
+         game_over = player.update(game_over)
+         if game_over == 0:
+                enemies_group.update()
+                
          if game_over == -1:
            if restart_button.draw():
-              player.reset(100, screen_height - 130)
+              world_data = []
+              world = reset_level(level)
+              #player.reset(100, screen_height - 130)
               game_over = 0
 
+         if game_over == 1:
+             level += 1
+             if level <= max_levels:
+                 world_data = []
+                 reset_level(level)
+                 game_over = 0
+             else:
+                 if restart_button.draw():
+                     level = 1
+                     world_data = []
+                     world = reset_level(level)
+                     game_over = 0
   
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
