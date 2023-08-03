@@ -4,6 +4,7 @@ from pygame.locals import *
 import pickle
 from os import path
 
+
 pygame.init()
 clock = pygame.time.Clock()
 
@@ -28,6 +29,7 @@ exit_img = pygame.image.load('../assets_img/UI/exit_btn.png')
 enemies_group = pygame.sprite.Group()
 lava_group = pygame.sprite.Group()
 exit_group = pygame.sprite.Group()
+coin_group = pygame.sprite.Group()
 
 def draw_grid():
     for line in range(0, 20):
@@ -154,6 +156,8 @@ class Player():
                 game_over = -1
             if pygame.sprite.spritecollide(self, exit_group, False):
                 game_over = 1
+            if pygame.sprite.spritecollide(self, coin_group, False):
+                pass
 
             self.rect.x += dx
             self.rect.y += dy
@@ -233,6 +237,9 @@ class World():
                 if tile == 8:
                     exit = Exit(col_count * tile_size, row_count * tile_size - (tile_size // 2))
                     exit_group.add(exit)
+                if tile == 7:
+                    coin = Coins(col_count * tile_size, row_count * tile_size - (tile_size // 2))
+                    coin_group.add(coin)
                 col_count += 1
             row_count += 1
 
@@ -272,17 +279,28 @@ class Lava(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
         img = pygame.image.load('../assets_img/Tiles/lava.png')
-        self.image = pygame.transform.scale(img, (tile_size, tile_size // 2))
+        self.image = pygame.transform.scale(img, (tile_size, tile_size))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y - self.rect.height + 50
-        self.move_direction = 1
-        self.move_counter = 0
+        #self.move_direction = 1
+        #self.move_counter = 0
+
+class Coins(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        pygame.sprite.Sprite.__init__(self)
+        img = pygame.image.load('../assets_img/Tiles/coin.png')
+        self.image = pygame.transform.scale(img, (tile_size, tile_size))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y - self.rect.height + 50
+        #self.move_direction = 1
+        #self.move_counter = 0
 
 class Exit(pygame.sprite.Sprite):
 	def __init__(self, x, y):
 		pygame.sprite.Sprite.__init__(self)
-		img = pygame.image.load('../assets_img/app_icon.png')
+		img = pygame.image.load('../assets_img/Tiles/door.png')
 		self.image = pygame.transform.scale(img, (tile_size, int(tile_size * 1.5)))
 		self.rect = self.image.get_rect()
 		self.rect.x = x
@@ -331,7 +349,7 @@ while run:
              level += 1
              if level <= max_levels:
                  world_data = []
-                 reset_level(level)
+                 world = reset_level(level)
                  game_over = 0
              else:
                  if restart_button.draw():
